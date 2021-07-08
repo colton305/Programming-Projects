@@ -47,11 +47,6 @@ for i in range(len(stockSymbol)):
     high = []
     low = []
     close = []
-    num = []
-    iterations = 0
-    dOffset = 0
-    skip = False
-
     # Scrape relevant stock data from each item in the list
     response = requests.get("https://ca.finance.yahoo.com/quote/"+stockSymbol[i]+"/history?p="+
                             stockSymbol[i], headers=headers)
