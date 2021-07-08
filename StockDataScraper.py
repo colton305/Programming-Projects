@@ -5,7 +5,6 @@ from numpy import genfromtxt
 import requests
 import openpyxl
 from openpyxl import workbook
-from classes import *
 import csv
 import lxml
 from lxml import html
