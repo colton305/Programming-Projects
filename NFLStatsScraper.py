@@ -23,7 +23,7 @@ keys = {"Arizona": 0, "Atlanta": 1, "Baltimore": 2, "Buffalo": 3, "Carolina": 4,
 conglomerate = [["TeamName", "Year"]]
 for i in range(229):
     conglomerate[0].append(i)
-for i in range(1):
+for i in range(10):
     for j in range(32):
         conglomerate.append([teams[j], 2020 - i])
     url = "https://www.pro-football-reference.com/years/"+str(2020-i)+"/"
