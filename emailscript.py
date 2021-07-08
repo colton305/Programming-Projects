@@ -12,13 +12,13 @@ from tkinter import *
 from tkinter import filedialog as fd
 import webbrowser
 
-
+# Add new email to the email file
 def newEmail(name, randomEmail):
     csvFile = open('emails.csv', mode='a')
     csvWriter = csv.DictWriter(csvFile, fieldnames=["name", "email"])
     csvWriter.writerow({"name": name, "email": randomEmail})
 
-
+# Find a corresponding email based on a name
 def findEmail(name):
     with open('emails.csv', 'r') as f:
         reader = csv.reader(f)
@@ -27,26 +27,26 @@ def findEmail(name):
                 data = list(reader)
                 return data[1]
 
-
+# Convert the schedule to an interpretable dataframe
 def conSchedule(file):
     schedule = pd.read_excel(file, engine='openpyxl')
     schedule.columns = schedule.iloc[3]
     schedule = schedule[4:]
     return schedule
 
-
+# Find the row of the schedule with the individual's name
 def parseSchedule(schedule, name):
-    yo = schedule[schedule.iloc[:, 0].str.match(name, na=False)]
-    return yo
+    row = schedule[schedule.iloc[:, 0].str.match(name, na=False)]
+    return row
 
-
+# Convert the extracted row of a dataframe as a readable excel file
 def exportExcel(df):
     with io.BytesIO() as buffer:
         with pd.ExcelWriter(buffer) as writer:
             df.to_excel(writer)
         return buffer.getvalue()
 
-
+# Send the actual email
 def sendEmail(receive, subject, df, export):
     multipart = MIMEMultipart()
     multipart['From'] = email
@@ -64,7 +64,7 @@ def sendEmail(receive, subject, df, export):
     s.sendmail(email, receive, multipart.as_string())
     s.quit()
 
-
+# Combine the functions in order to email each person their portion of the schedule
 def sendSchedules(file):
     workerNames = []
     workerEmails = []
@@ -84,7 +84,7 @@ def sendSchedules(file):
         export = {'schedule.xlsx': excel}
         sendEmail(workerEmails[i], "A&W Schedule", snippet, export)
 
-
+# Change the screen to upload a new email
 def newEmailScreen(buttons):
     for i in range(len(buttons)):
         buttons[i].forget()
@@ -102,7 +102,7 @@ def newEmailScreen(buttons):
     emailEntry.pack(padx=305, pady=(0, 40))
     submit.pack(padx=305, pady=(0, 80))
 
-
+# Return to the main menu
 def returnMainMenu(widgets):
     for i in range(len(widgets)):
         widgets[i].forget()
@@ -111,7 +111,7 @@ def returnMainMenu(widgets):
         message.pack(padx=305, pady=(0, 40))
         opening.pack(padx=305, pady=(0, 80))
 
-
+# Write a message to be sent out to all employees
 def messageScreen(buttons):
     for i in range(len(buttons)):
         buttons[i].forget()
@@ -130,7 +130,7 @@ def messageScreen(buttons):
     messageEntry.pack(pady=(0, 40), ipadx=250)
     submit.pack(padx=305, pady=(0, 80))
 
-
+# Send the written message to all employees
 def sendMessage(subject, message):
     workerNames = []
     workerEmails = []
@@ -146,7 +146,7 @@ def sendMessage(subject, message):
     for i in range(len(workerNames)):
         sendEmail2(workerEmails[i], subject, message)
 
-
+# Send a message with text opposed to an excel file with a schedule
 def sendEmail2(receive, subject, message):
     multipart = MIMEMultipart()
     multipart['From'] = email
@@ -162,7 +162,7 @@ def sendEmail2(receive, subject, message):
     s.sendmail(email, receive, multipart.as_string())
     s.quit()
 
-
+# Create the main menu and execute functions in the GUI
 email = "AWCanada.no.reply@gmail.com"
 password = "Drillers03"
 context = ssl.create_default_context()
